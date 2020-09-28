@@ -22,6 +22,19 @@ def dot_product(m1, row, m2, col):
     return sum([m1_row[i] * m2_col[i] for i in range(len(m1_row))])
 
 
+def minor(matrix, exc_i, exc_j):
+    return [[matrix[i][j] for j in range(len(matrix[0])) if j != exc_j] for i in range(len(matrix)) if
+            i != exc_i]
+
+
+def det(matrix):
+    if len(matrix) == 1:
+        return matrix[0][0]
+    elif len(matrix) == 2:
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+    return sum([matrix[0][col] * det(minor(matrix, 0, col)) * (-1)**col for col in range(len(matrix))])
+
+
 def add_matrices():
     n1, m1 = list(map(int, input("Enter size of first matrix: ").split()))
     matrix1 = enter_matrix("Enter first matrix:", n1)
@@ -85,21 +98,18 @@ def transpose_matrix():
 
 
 def calc_determinant():
-    def det(matrix):
-        def minor(matrix, exc_i, exc_j):
-            return [[matrix[i][j] for j in range(len(matrix[0])) if j != exc_j] for i in range(len(matrix)) if
-                    i != exc_i]
-
-        if len(matrix) == 1:
-            return matrix[0][0]
-        elif len(matrix) == 2:
-            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-        return sum([matrix[0][col] * det(minor(matrix, 0, col)) * (-1) ** (1 + col + 1) for col in range(len(matrix))])
-
     n, m = list(map(int, input("Enter size of matrix: ").split()))
     matrix = enter_matrix("Enter matrix:", n)
     print("The result is:")
     print(det(matrix), '\n')
+
+
+def inverse_matrix():
+    n, m = list(map(int, input("Enter size of matrix: ").split()))
+    matrix = enter_matrix("Enter matrix:", n)
+    new_matrix = list(map(list, zip(*[[det(minor(matrix, i, j)) * (-1)**(i+j) for j in range(n)] for i in range(n)])))
+    print("The result is:")
+    print_matrix([[new_matrix[i][j] * 1 / det(matrix) for j in range(n)] for i in range(n)])
 
 
 while True:
@@ -108,6 +118,7 @@ while True:
 3. Multiply matrices
 4. Transpose matrix
 5. Calculate a determinant
+6. Inverse matrix
 0. Exit""")
     try:
         choice = input("Your choice: ")
@@ -123,5 +134,7 @@ while True:
             transpose_matrix()
         if choice == '5':
             calc_determinant()
+        if choice == '6':
+            inverse_matrix()
     except:
         print("The operation cannot be performed.\n")
