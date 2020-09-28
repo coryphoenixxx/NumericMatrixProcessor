@@ -80,30 +80,13 @@ def transpose_matrix():
     n, m = list(map(int, input("Enter size of matrix: ").split()))
     matrix = enter_matrix("Enter matrix:", n)
     if trans_choice == '1':
-        for j in range(len(matrix[0])):
-            row = []
-            for i in range(len(matrix)):
-                row.append(matrix[i][j])
-            res_matrix.append(row)
+        print_matrix(list(map(list, zip(*matrix))))
     if trans_choice == '2':
-        for j in range(len(matrix[0])-1, -1, -1):
-            row = []
-            for i in range(len(matrix)-1, -1, -1):
-                row.append(matrix[i][j])
-            res_matrix.append(row)
+        print_matrix(list(map(list, zip(*matrix[::-1])))[::-1])
     if trans_choice == '3':
-        for j in range(len(matrix[0])):
-            row = []
-            for i in range(len(matrix)-1, -1, -1):
-                row.append(matrix[j][i])
-            res_matrix.append(row)
+        print_matrix([row[::-1] for row in matrix])
     if trans_choice == '4':
-        for j in range(len(matrix[0])-1, -1, -1):
-            row = []
-            for i in range(len(matrix)):
-                row.append(matrix[j][i])
-            res_matrix.append(row)
-    print_matrix(res_matrix)
+        print_matrix(matrix[::-1])
 
 
 while True:
